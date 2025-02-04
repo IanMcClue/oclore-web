@@ -1,0 +1,32 @@
+sequenceDiagram
+    participant C as Client (localStorage)
+    participant F as Frontend
+    participant B as Backend
+    participant S as Supabase
+    participant E as Email Service
+
+    Note over C,E: Initial Questionnaire
+    F->>C: Store questionnaire responses
+    
+    Note over C,E: Signup Flow
+    F->>B: Submit signup + questionnaire
+    B->>S: Create user (status: unverified)
+    B->>S: Store responses (status: pending)
+    B->>E: Send verification email
+    
+    Note over C,E: Email Verification
+    E->>B: User clicks verification link
+    B->>S: Update user status to verified
+    B->>S: Update responses status to verified
+    B->>B: Generate user story
+    B->>S: Store generated story
+    B->>F: Return success
+    F->>C: Clear localStorage
+
+    Note over C,E: Story Access
+    F->>S: Request user story
+    S-->>F: Return story if exists
+    alt No Story Found
+        F->>B: Request story generation
+        B->>S: Store and return new story
+    end

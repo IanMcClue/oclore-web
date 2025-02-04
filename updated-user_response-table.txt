@@ -1,0 +1,88 @@
+Updated user_responses Table
+Schema
+sql
+Copy
+CREATE TABLE public.user_responses (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(), -- Primary key for the table
+    user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE ON UPDATE CASCADE, -- Foreign key
+    name TEXT NOT NULL, -- Name for the response (optional)
+    responses JSONB NOT NULL, -- Stores user responses as JSONB
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL, -- Timestamp for creation
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL -- Timestamp for updates
+);
+Key Columns:
+id: Primary key for the user_responses table. Each response has a unique id.
+
+user_id: Foreign key referencing auth.users(id). This links each response to a specific user in the auth.users table.
+
+responses: JSONB column to store user responses (e.g., {"question1": "answer1", "question2": "answer2"}).
+
+created_at: Automatically records when the response was created.
+
+updated_at: Automatically updates whenever the response is modified.
+
+Foreign Key Relationship
+user_id references auth.users(id).
+
+ON DELETE CASCADE: If a user is deleted from auth.users, all their associated responses in user_responses are automatically deleted.
+
+ON UPDATE CASCADE: If the id of a user in auth.users is updated, the user_id in user_responses is automatically updated.
+
+Row Level Security (RLS) Policies
+Policy for SELECT, INSERT, UPDATE, and DELETE
+sql
+Copy
+CREATE POLICY "User can manage their own responses"
+ON public.user_responses
+FOR ALL
+USING (auth.uid() = user_id) -- Restrict access to rows where auth.uid() matches user_id
+WITH CHECK (auth.uid() = user_id); -- Ensure users can only insert/update their own data
+Key Points:
+USING: Ensures users can only access rows where auth.uid() = user_id.
+
+WITH CHECK: Ensures users can only insert or update rows where auth.uid() = user_id.
+
+RLS must be enabled on the user_responses table:
+
+sql
+Copy
+ALTER TABLE public.user_responses ENABLE ROW LEVEL SECURITY;
+Automating updated_at Field
+To automatically update the updated_at field whenever a row is modified, create a trigger:
+
+sql
+Copy
+CREATE OR REPLACE FUNCTION update_updated_at_column()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.updated_at = now();
+    RETURN NEW;
+END;
+$$ language 'plpgsql';
+
+CREATE TRIGGER update_user_responses_updated_at
+BEFORE UPDATE ON public.user_responses
+FOR EACH ROW
+EXECUTE FUNCTION update_updated_at_column();
+Key Points to Remember When Refactoring Code
+Always Use user_id for User-Specific Operations:
+
+When querying, updating, or deleting responses, always filter by user_id (not id).
+
+Example: WHERE user_id = 'user-uuid'.
+
+Use auth.uid() for RLS:
+
+Supabase automatically provides auth.uid() for authenticated users. Use this to enforce RLS in your queries.
+
+Foreign Key Relationship:
+
+The user_id column links to auth.users(id). Ensure that any user-specific operations reference this column.
+
+JSONB for responses:
+
+The responses column stores user responses as JSONB. Use Supabase's JSONB functions (e.g., ->, ->>, #>, #>>) to query or update nested data.
+
+Timestamps:
+
+Use created_at and updated_at for tracking when responses were created or modified.
