@@ -1,17 +1,18 @@
-import './globals.css'
-import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
-import Link from 'next/link'
-import { Home, User, Book, BookOpen } from 'lucide-react'
-import SupabaseProvider from '@/app/supabase-provider'
-import { createServerClient } from '@supabase/ssr'
-import { cookies } from 'next/headers'
+import type React from "react"
+import "./globals.css"
+import type { Metadata } from "next"
+import { Inter } from "next/font/google"
+import Link from "next/link"
+import { Home, User, BookOpen } from "lucide-react"
+import SupabaseProvider from "@/app/supabase-provider"
+import { createServerClient } from "@supabase/ssr"
+import { cookies } from "next/headers"
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: 'FYP App',
-  description: 'For You Page Application',
+  title: "FYP App",
+  description: "For You Page Application",
 }
 
 export default async function RootLayout({
@@ -37,20 +38,24 @@ export default async function RootLayout({
         },
         remove(name: string, options: any) {
           try {
-            cookieStore.set(name, '', options)
+            cookieStore.set(name, "", options)
           } catch (error) {
             // Handle cookie errors
           }
         },
       },
-    }
+    },
   )
 
-  const { data: { user } } = await supabase.auth.getUser()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
 
   return (
     <html lang="en" className={inter.className}>
-      <body>
+      <body className="bg-[#f9eeec]">
+        {" "}
+        {/* Added background color here */}
         <SupabaseProvider initialUser={user}>
           <div className="min-h-screen flex flex-col">
             <main className="flex-grow pb-16">{children}</main>
