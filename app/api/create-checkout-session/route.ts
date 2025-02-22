@@ -9,7 +9,7 @@ export async function POST(req: Request) {
     const supabase = createClient()
     
     
-    const { data: { user }, error: userError } = await supabase.auth.getUser()
+    const { data: { user }, error: userError } = await (await supabase).auth.getUser()
 
     if (userError || !user) {
       return NextResponse.json({ error: 'Not authenticated' }, { status: 401 })
@@ -29,7 +29,7 @@ export async function POST(req: Request) {
     }
 
     // Check if user already has a Stripe customer ID
-    const { data: existingSubscription } = await supabase
+    const { data: existingSubscription } = await (await supabase)
       .from('subscriptions')
       .select('stripe_customer_id')
       .eq('user_id', user.id)
@@ -48,7 +48,7 @@ export async function POST(req: Request) {
       stripeCustomerId = customer.id
 
       // Save the Stripe customer ID to the database
-      await supabase.from('subscriptions').insert({
+      await (await supabase).from('subscriptions').insert({
         user_id: user.id,
         stripe_customer_id: stripeCustomerId,
         status: 'incomplete',
