@@ -130,7 +130,7 @@ export default function Auth() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-b from-[#e7bab2] to-[#f9eeec]">
+    <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#e7bab2] to-[#f9eeec] p-4">
       <Tabs 
         value={selectedTab} 
         onValueChange={setSelectedTab} 

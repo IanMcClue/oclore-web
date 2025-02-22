@@ -276,7 +276,7 @@ export default function Home() {
   }, [])
 
   return (
-    <div className="min-h-screen bg-[#f9eeeb] text-black overflow-hidden">
+    <div className="flex min-h-screen flex-col items-center justify-center bg-[#f9eeec] p-4">
       {/* Segmented Progress Bar */}
       <div className="fixed top-4 left-4 right-4 flex gap-1 z-40">
         {prompts.map((_, index) => (

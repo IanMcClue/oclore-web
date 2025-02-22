@@ -74,92 +74,94 @@ export default function FYPPage() {
   }
 
   return (
-    <div className="fixed inset-0 bg-[#f9eeec]">
-      <div className="absolute top-0 left-0 right-0 z-20">
-        <div className="flex justify-center items-center px-4 pt-2 relative">
-          {activeTab === 'profile' && (
-            <div className="absolute right-2 top-1/2 -translate-y-1/2">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <button className="relative text-gray-800 rounded-full p-1.5 shadow-md hover:bg-[#E8D5CB] transition-colors w-9 h-9 flex items-center justify-center">
-                    <Menu className="w-3 h-3" />
-                  </button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-56 bg-white rounded-lg shadow-lg p-2">
-                  <DropdownMenuItem 
-                    className="px-3 py-2 text-sm cursor-pointer hover:bg-[#f3ddd9] rounded-md transition-colors"
-                    onClick={handleLogout}
-                  >
-                    Logout
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+    <div className="flex min-h-screen flex-col items-center justify-center bg-[#f9eeec] p-4">
+      <div className="fixed inset-0 bg-[#f9eeec]">
+        <div className="absolute top-0 left-0 right-0 z-20">
+          <div className="flex justify-center items-center px-4 pt-2 relative">
+            {activeTab === 'profile' && (
+              <div className="absolute right-2 top-1/2 -translate-y-1/2">
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <button className="relative text-gray-800 rounded-full p-1.5 shadow-md hover:bg-[#E8D5CB] transition-colors w-9 h-9 flex items-center justify-center">
+                      <Menu className="w-3 h-3" />
+                    </button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="w-56 bg-white rounded-lg shadow-lg p-2">
+                    <DropdownMenuItem 
+                      className="px-3 py-2 text-sm cursor-pointer hover:bg-[#f3ddd9] rounded-md transition-colors"
+                      onClick={handleLogout}
+                    >
+                      Logout
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+            )}
+            <div className="flex w-full max-w-[200px] relative">
+              <button 
+                className={cn(
+                  "flex-1 py-2 text-base font-medium transition-colors relative",
+                  activeTab === 'for-you' ? "text-black" : "text-gray-400"
+                )}
+                onClick={() => setActiveTab('for-you')}
+              >
+                For You
+              </button>
+              <button
+                className={cn(
+                  "flex-1 py-2 text-base font-medium transition-colors relative",
+                  activeTab === 'profile' ? "text-black" : "text-gray-400"
+                )}
+                onClick={() => setActiveTab('profile')}
+              >
+                Profile
+              </button>
+              <div 
+                className="absolute bottom-0 h-[2px] bg-black transition-all duration-300 w-1/2"
+                style={{
+                  transform: `translateX(${activeTab === 'profile' ? '100%' : '0'})`
+                }}
+              />
             </div>
-          )}
-          <div className="flex w-full max-w-[200px] relative">
-            <button 
-              className={cn(
-                "flex-1 py-2 text-base font-medium transition-colors relative",
-                activeTab === 'for-you' ? "text-black" : "text-gray-400"
-              )}
-              onClick={() => setActiveTab('for-you')}
-            >
-              For You
-            </button>
-            <button
-              className={cn(
-                "flex-1 py-2 text-base font-medium transition-colors relative",
-                activeTab === 'profile' ? "text-black" : "text-gray-400"
-              )}
-              onClick={() => setActiveTab('profile')}
-            >
-              Profile
-            </button>
-            <div 
-              className="absolute bottom-0 h-[2px] bg-black transition-all duration-300 w-1/2"
-              style={{
-                transform: `translateX(${activeTab === 'profile' ? '100%' : '0'})`
-              }}
-            />
           </div>
         </div>
-      </div>
 
-      <div className="absolute inset-0 top-[56px] bottom-0">
-        {activeTab === 'for-you' ? (
-          <div 
-            ref={containerRef}
-            className="h-full w-full"
-            onTouchStart={handleTouchStart}
-            onTouchMove={handleTouchMove}
-            onTouchEnd={handleTouchEnd}
-            onWheel={handleWheel}
-          >
-            <div
-              className="absolute inset-0 w-full h-full"
-              style={{
-                transform: `translateY(-${currentIndex * 100}%)`,
-                transition: 'transform 300ms ease-out'
-              }}
+        <div className="absolute inset-0 top-[56px] bottom-0">
+          {activeTab === 'for-you' ? (
+            <div 
+              ref={containerRef}
+              className="h-full w-full"
+              onTouchStart={handleTouchStart}
+              onTouchMove={handleTouchMove}
+              onTouchEnd={handleTouchEnd}
+              onWheel={handleWheel}
             >
-              {posts.map((post, index) => (
-                <div
-                  key={post.id}
-                  className="absolute top-0 left-0 w-full h-full"
-                  style={{
-                    transform: `translateY(${index * 100}%)`,
-                  }}
-                >
-                  <PostComponent post={post} />
-                </div>
-              ))}
+              <div
+                className="absolute inset-0 w-full h-full"
+                style={{
+                  transform: `translateY(-${currentIndex * 100}%)`,
+                  transition: 'transform 300ms ease-out'
+                }}
+              >
+                {posts.map((post, index) => (
+                  <div
+                    key={post.id}
+                    className="absolute top-0 left-0 w-full h-full"
+                    style={{
+                      transform: `translateY(${index * 100}%)`,
+                    }}
+                  >
+                    <PostComponent post={post} />
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
-        ) : (
-          <div className="h-full overflow-auto">
-            <ProfileComponent />
-          </div>
-        )}
+          ) : (
+            <div className="h-full overflow-auto">
+              <ProfileComponent />
+            </div>
+          )}
+        </div>
       </div>
     </div>
   )

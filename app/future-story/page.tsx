@@ -37,26 +37,30 @@ export default async function FutureStory() {
     const isGenerating = responsesResult.data?.status === 'verified'
 
     return (
-      <FutureStoryClient 
-        user={user} 
-        name={name} 
-        initialStory={storyResult.data?.story || ''} 
-        status={responsesResult.data?.status || 'pending'}
-        isGenerating={isGenerating}
-        lastUpdated={storyResult.data?.updated_at || null}
-      />
+      <div className="flex min-h-screen flex-col items-center justify-center bg-[#f9eeec] p-4">
+        <FutureStoryClient 
+          user={user} 
+          name={name} 
+          initialStory={storyResult.data?.story || ''} 
+          status={responsesResult.data?.status || 'pending'}
+          isGenerating={isGenerating}
+          lastUpdated={storyResult.data?.updated_at || null}
+        />
+      </div>
     )
   } catch (error) {
     console.error('Error in future story page:', error)
     return (
-      <FutureStoryClient 
-        user={user} 
-        name={name} 
-        initialStory="" 
-        status="error"
-        isGenerating={false}
-        lastUpdated={null}
-      />
+      <div className="flex min-h-screen flex-col items-center justify-center bg-[#f9eeec] p-4">
+        <FutureStoryClient 
+          user={user} 
+          name={name} 
+          initialStory="" 
+          status="error"
+          isGenerating={false}
+          lastUpdated={null}
+        />
+      </div>
     )
   }
 }
