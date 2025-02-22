@@ -6,7 +6,7 @@ import stripe from '@/lib/stripe'
 
 export async function POST(req: Request) {
   const body = await req.text()
-  const signature = headers().get('Stripe-Signature') as string
+  const signature = (await headers()).get('Stripe-Signature') as string
 
   let event: Stripe.Event
 
@@ -27,7 +27,7 @@ export async function POST(req: Request) {
       const checkoutSession = event.data.object as Stripe.Checkout.Session
       
       // Update subscription status
-      await supabase
+      await (await supabase)
         .from('subscriptions')
         .update({
           status: 'active',
@@ -37,7 +37,7 @@ export async function POST(req: Request) {
         .eq('stripe_customer_id', checkoutSession.customer as string)
 
       // Create initial tasks for the user
-      const { data: userData } = await supabase
+      const { data: userData } = await (await supabase)
         .from('user_stories')
         .select('routines')
         .eq('user_id', checkoutSession.metadata?.userId)
@@ -46,7 +46,7 @@ export async function POST(req: Request) {
       if (userData?.routines) {
         const routines = JSON.parse(userData.routines)
         const startDate = new Date()
-        const tasks = []
+        const tasks: { user_id: string | undefined; title: string; amount: string; time: string; icon: string; progress: number; date: string }[] = []
 
         for (let i = 0; i < 7; i++) {
           const taskDate = new Date(startDate)
@@ -66,14 +66,14 @@ export async function POST(req: Request) {
           })
         }
 
-        await supabase.from('tasks').insert(tasks)
+        await (await supabase).from('tasks').insert(tasks)
       }
 
       break
     case 'invoice.payment_succeeded':
       // Handle successful recurring payments
       const invoice = event.data.object as Stripe.Invoice
-      await supabase
+      await (await supabase)
         .from('subscriptions')
         .update({
           status: 'active',
@@ -85,7 +85,7 @@ export async function POST(req: Request) {
     case 'customer.subscription.deleted':
       // Handle subscription cancellations
       const subscription = event.data.object as Stripe.Subscription
-      await supabase
+      await (await supabase)
         .from('subscriptions')
         .update({ status: 'canceled' })
         .eq('stripe_subscription_id', subscription.id)
