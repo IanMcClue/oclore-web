@@ -97,6 +97,33 @@ export interface Database {
           updated_at?: string
         }
       }
+      // Add the missing user_routines table
+      user_routines: {
+        Row: {
+          id: string
+          user_id: string
+          routine_name: string
+          frequency: string
+          time_of_day: string
+          created_at?: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          routine_name: string
+          frequency: string
+          time_of_day: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          routine_name?: string
+          frequency?: string
+          time_of_day?: string
+          created_at?: string
+        }
+      }
     }
     Views: {
       [_ in never]: never
