@@ -60,10 +60,9 @@ export function TaskItem({ id, title, amount, time, icon, progress, onProgress, 
 
   return (
     <div 
-      className="flex items-center gap-2 w-[calc(100%-8px)] mx-auto p-3 rounded-xl transition-all duration-300 cursor-pointer transform"
+      className="relative flex items-center gap-2 w-[calc(100%-8px)] mx-auto p-3 rounded-xl transition-all duration-300 cursor-pointer transform overflow-hidden"
       style={{
-        background: `linear-gradient(to right, ${backgroundColor} ${progress}%, rgb(var(--background-end-rgb)) ${progress}%)`,
-        color: `rgb(var(--foreground-rgb))`,
+        background: 'linear-gradient(to bottom, #e7bab2, #f9eeec)',
         transform: isPressed ? 'scale(0.98)' : 'scale(1)',
       }}
       onClick={() => {
@@ -80,7 +79,17 @@ export function TaskItem({ id, title, amount, time, icon, progress, onProgress, 
       }}
       aria-label={`Update progress for ${title}. Current progress: ${progress}%`}
     >
-      <div className="relative w-12 h-12 flex-shrink-0">
+      {/* Progress overlay */}
+      <div 
+        className="absolute inset-0 transition-all duration-300"
+        style={{
+          background: backgroundColor,
+          width: `${progress}%`,
+          opacity: 0.3,
+        }}
+      />
+
+      <div className="relative w-12 h-12 flex-shrink-0 z-10">
         <svg className="w-full h-full">
           <circle
             cx="24"
@@ -128,7 +137,7 @@ export function TaskItem({ id, title, amount, time, icon, progress, onProgress, 
         </AnimatePresence>
       </div>
 
-      <div className="flex-1">
+      <div className="flex-1 z-10">
         <div className="font-medium">
           {title}
         </div>
@@ -137,7 +146,7 @@ export function TaskItem({ id, title, amount, time, icon, progress, onProgress, 
         </div>
       </div>
 
-      <div className="text-sm opacity-70 min-w-[65px] text-right">
+      <div className="text-sm opacity-70 min-w-[65px] text-right z-10">
         {time}
       </div>
 
@@ -148,7 +157,7 @@ export function TaskItem({ id, title, amount, time, icon, progress, onProgress, 
           e.stopPropagation()
           onDelete()
         }}
-        className="flex-shrink-0"
+        className="flex-shrink-0 z-10"
         aria-label={`Delete ${title} task`}
       >
         <Trash2Icon className="h-4 w-4" />
@@ -156,4 +165,3 @@ export function TaskItem({ id, title, amount, time, icon, progress, onProgress, 
     </div>
   )
 }
-

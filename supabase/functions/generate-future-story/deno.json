@@ -2,9 +2,10 @@
   "imports": {
     "http/server": "https://deno.land/std@0.170.0/http/server.ts",
     "@supabase/supabase-js": "https://esm.sh/@supabase/supabase-js@2",
-    "openai": "https://esm.sh/openai@3.2.1?dts"
+    "openai": "https://esm.sh/openai@3.2.1?dts",
+    "next/server": "./stubs/next-server.ts"
   },
   "tasks": {
-    "dev": "deno run --allow-net --allow-env --watch supabase/functions/generate-future-story/index.ts"
+    "dev": "deno run --allow-net --allow-env --watch functions/generate-future-story/index.ts"
   }
 }

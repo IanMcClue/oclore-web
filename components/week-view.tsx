@@ -139,7 +139,7 @@ export function WeekView({ onDateSelect, selectedDate, tasks }: WeekViewProps) {
               </motion.button>
               {isSelected && (
                 <motion.div 
-                  className="absolute bg-[#E8D5CB] rounded-[36px]"
+                  className="absolute bg-gradient-to-b from-[#e7bab2] to-[#f9eeec] rounded-[36px]"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 0.7 }}
                   style={{
@@ -157,14 +157,14 @@ export function WeekView({ onDateSelect, selectedDate, tasks }: WeekViewProps) {
         })}
       </motion.div>
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent>
+        <DialogContent className="bg-gradient-to-b from-[#e7bab2] to-[#f9eeec]">
           <DialogHeader>
             <DialogTitle>Tasks for {selectedTaskDate?.toDateString()}</DialogTitle>
           </DialogHeader>
           <ScrollArea className="h-[300px] w-full rounded-md border p-4">
             {tasksForSelectedDate.length > 0 ? (
               tasksForSelectedDate.map(task => (
-                <div key={task.id} className="mb-4 p-3 bg-white rounded-lg shadow-sm">
+                <div key={task.id} className="mb-4 p-3 bg-white/80 backdrop-blur-sm rounded-lg shadow-sm">
                   <div className="flex items-center">
                     <span className="text-2xl mr-2">{task.icon}</span>
                     <div>
@@ -189,4 +189,3 @@ export function WeekView({ onDateSelect, selectedDate, tasks }: WeekViewProps) {
     </div>
   )
 }
-

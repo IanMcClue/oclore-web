@@ -26,12 +26,12 @@ export function EmojiPicker({ onEmojiSelect }: EmojiPickerProps) {
           <span>Select Emoji</span>
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-64">
+      <PopoverContent className="w-64 bg-gradient-to-b from-[#e7bab2] to-[#f9eeec]">
         <div className="grid grid-cols-5 gap-2">
           {emojis.map((emoji) => (
             <button
               key={emoji}
-              className="text-2xl hover:bg-gray-100 rounded p-2"
+              className="text-2xl hover:bg-gradient-to-b from-[#e7bab2] to-[#f9eeec] rounded p-2"
               onClick={() => handleEmojiSelect(emoji)}
             >
               {emoji}
