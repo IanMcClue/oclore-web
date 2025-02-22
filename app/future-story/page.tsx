@@ -32,24 +32,9 @@ export default async function FutureStory() {
         .single()
     ])
 
-    // Handle different states
-    if (responsesResult.data?.status === 'verified' && 
-        (!storyResult.data || !storyResult.data.story || 
-         storyResult.data.story === 'Generating your story...')) {
-      // Trigger story generation if verified but no story or still in generating state
-      await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/generate-future-story`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ userId: user.id }),
-      })
-    }
 
     // Determine loading state
-    const isGenerating = !storyResult.data?.story || 
-                        storyResult.data.story === 'Generating your story...' ||
-                        responsesResult.data?.status === 'verified'
+    const isGenerating = responsesResult.data?.status === 'verified'
 
     return (
       <FutureStoryClient 

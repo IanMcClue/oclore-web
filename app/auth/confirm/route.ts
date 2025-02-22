@@ -78,21 +78,6 @@ export async function GET(request: NextRequest) {
             }
 
             if (anonymousResponses) {
-              // Update the response with the user's ID
-              const { error: updateError } = await supabase
-                .from('user_responses')
-                .update({
-                  user_id: user.id,
-                  status: 'verified',
-                  updated_at: new Date().toISOString()
-                })
-                .eq('id', anonymousResponses.id)
-
-              if (updateError) {
-                console.error('Error updating response:', updateError)
-              } else {
-                console.log('Successfully migrated responses for user:', user.id)
-              }
             }
           } else {
             console.log('No existing responses found for user:', user.id)
