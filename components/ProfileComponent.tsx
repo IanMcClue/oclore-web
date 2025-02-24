@@ -195,20 +195,6 @@ export function ProfileComponent() {
     }
   }
 
-  // Simulating fetching tasks
-  const sampleTasks: Task[] = [
-    {
-      id: 1,
-      title: "Morning Meditation",
-      amount: "15 min",
-      time: "8:00 AM",
-      icon: "🧘‍♀️",
-      progress: 0,
-      date: new Date().toISOString().split("T")[0],
-    }
-  ]
-  setTasks(sampleTasks) // Set the sample tasks to the state
-
   return (
     <ScrollArea className="h-screen bg-gradient-to-b from-[#f9eeec] to-[#f3ddd9]">
       <div className="w-full max-w-[100vw] mx-auto px-4 py-4 sm:max-w-md sm:py-8 sm:px-4">
